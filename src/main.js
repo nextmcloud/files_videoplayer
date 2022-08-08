@@ -26,6 +26,9 @@ __webpack_nonce__ = btoa(OC.requestToken)
 __webpack_public_path__ = OC.filePath('files_videoplayer', '', 'js/')
 
 let videojs = null
+// preview width generation
+const previewWidth = 1366
+const previewHeight = 668
 
 const { limit } = loadState('files_downloadlimit', 'download_limit', { limit: -1 })
 const hasDownloadLimit = limit !== -1
@@ -33,6 +36,8 @@ const hasDownloadLimit = limit !== -1
 const videoViewer = {
 	UI: {
 		show() {
+			const sharingTokenVal = document.getElementById('sharingToken').value
+			const poster = OC.generateUrl(`/apps/files_sharing/publicpreview/${sharingTokenVal}?x=${previewWidth}&y=${previewHeight}&a=1`)
 			const playerView = document.createElement('video')
 			playerView.id = 'my_video_1'
 			playerView.classList.add('video-js')
@@ -42,7 +47,7 @@ const videoViewer = {
 			playerView.preload = 'auto'
 			playerView.width = '100%'
 			playerView.height = '100%'
-			playerView.poster = OC.filePath('files_videoplayer', '', 'img') + '/poster.png'
+			playerView.poster = poster
 			playerView.setAttribute('data-setup', '{"techOrder": ["html5"]}')
 
 			if (!hasDownloadLimit) {
